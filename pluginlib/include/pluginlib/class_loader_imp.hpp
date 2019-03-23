@@ -350,6 +350,11 @@ std::vector<std::string> ClassLoader<T>::getAllLibraryPathsToTry(
     std::string current_path = all_paths_without_extension.at(c);
     all_paths.push_back(current_path + path_separator + library_name_with_extension);
     all_paths.push_back(current_path + path_separator + stripped_library_name_with_extension);
+#ifdef WIN32
+    if( stripped_library_name.substr(0,3) == "lib"){
+      all_paths.push_back(current_path + path_separator + stripped_library_name.substr(3) + non_debug_suffix);
+    }
+#endif
     // We're in debug mode, try debug libraries as well
     if (debug_library_suffix) {
       all_paths.push_back(
